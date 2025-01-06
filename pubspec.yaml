@@ -1,18 +1,25 @@
 name: daily_tasks
 description: "A new Flutter project."
 publish_to: 'none' 
-version: 1.0.0+1
+version: 0.0.1
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
   flutter: ">=3.27.1 <4.0.0"
+
+# workspace:
+#   - packages/rest_client
+#   - packages/application_database
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  collection: any
+  async: any
   meta: any
+  intl: any
 
   # State management
   control: ^0.2.0
@@ -38,6 +45,9 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    # Add assets from the images directory to the application.
+    - assets/images/
 
 flutter_gen:
   output: lib/src/core/constant/generated

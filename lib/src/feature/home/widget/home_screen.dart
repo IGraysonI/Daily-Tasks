@@ -1,4 +1,6 @@
+import 'package:daily_tasks/src/feature/daily_tasks/widget/daily_tasks_screen.dart';
 import 'package:daily_tasks/src/feature/initialization/widget/dependencies_scope.dart';
+import 'package:daily_tasks/src/feature/weekly_tasks/widget/weekly_tasks_screen.dart';
 import 'package:flutter/material.dart';
 
 /// {@template home_screen}
@@ -12,30 +14,37 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   late final _logger = DependenciesScope.of(context).logger;
+  late final TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _logger.info('Welcome To Sizzle Starter!');
+    _tabController = TabController(length: 2, vsync: this);
   }
+
+  final List<Widget> _tabs = [
+    const Tab(text: 'Daily Tasks'),
+    const Tab(text: 'Weekly Tasks'),
+  ];
 
   @override
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Welcome to Sizzle Starter!',
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-              const SizedBox(height: 16),
-            ],
+        appBar: AppBar(
+          bottom: TabBar(
+            tabs: _tabs,
+            controller: _tabController,
           ),
+        ),
+        body: TabBarView(
+          controller: _tabController,
+          children: const [
+            DailyTasksScreen(),
+            WeeklyTasksScreen(),
+          ],
         ),
       );
 }

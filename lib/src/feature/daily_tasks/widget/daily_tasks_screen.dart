@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 /// {@template daily_tasks_screen}
 /// Screen that displays all daily tasks.
@@ -10,7 +10,33 @@ class DailyTasksScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => const Center(
-        child: Text('Daily Tasks'),
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(16),
+        child: CustomScrollView(
+          slivers: [
+            const SliverToBoxAdapter(
+              child: LinearProgressIndicator(
+                value: 0.5,
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => ListTile(
+                  title: Text('Task $index'),
+                  subtitle: const Text('Description'),
+                  trailing: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 8,
+                    children: [
+                      Text('Value'),
+                      Icon(Icons.check_circle),
+                    ],
+                  ),
+                ),
+                childCount: 10,
+              ),
+            ),
+          ],
+        ),
       );
 }

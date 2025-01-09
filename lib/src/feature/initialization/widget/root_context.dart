@@ -24,7 +24,9 @@ class RootContext extends StatelessWidget {
   Widget build(BuildContext context) => DependenciesScope(
         dependencies: compositionResult.dependencies,
         child: const ApplicationSettingsScope(
-          child: WindowSizeScope(child: MaterialContext()),
+          child: WindowSizeScope(
+            child: MaterialContext(),
+          ),
         ),
       );
 }

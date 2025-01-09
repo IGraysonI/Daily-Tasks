@@ -21,6 +21,9 @@ dependencies:
   meta: any
   intl: any
 
+  # Routing
+  octopus: ^0.0.9
+
   # State management
   control: ^0.2.0
 

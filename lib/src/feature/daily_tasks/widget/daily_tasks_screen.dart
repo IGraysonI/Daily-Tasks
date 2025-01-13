@@ -1,15 +1,13 @@
 import 'package:daily_tasks/src/core/utils/extensions/date_time_extension.dart';
-import 'package:daily_tasks/src/core/widget/elevated_card.dart';
 import 'package:daily_tasks/src/core/widget/space.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
 // TODO: Добавить награды за определнные трешхолды выполненных задач.
 // Например, targetWeight = 10, если выполнено вес заполнен на 2, то одна награда, если на 5, то другая награда и т.д.
 // Добавить возможность добавления наград за определенные вес.
 
-const double targetWeight = 10;
-const double currentWeight = 3;
+const int _targetWeight = 10;
+const int _currentWeight = 3;
 
 class _DailyTask {
   final String title;
@@ -66,8 +64,13 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> {
             SliverToBoxAdapter(
               child: Space.sm(),
             ),
-            const SliverToBoxAdapter(
-              child: _SegmentedProgress(),
+            SliverToBoxAdapter(
+              child: SegmentedLinearProgressIndicator(
+                maxValue: _targetWeight,
+                currentValue: _currentWeight,
+                primaryColor: Colors.green,
+                secondaryColor: Colors.grey.shade300,
+              ),
             ),
             SliverToBoxAdapter(
               child: Space.sm(),
@@ -94,73 +97,71 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> {
       );
 }
 
-/// {@template _SegmentedProgress}
-/// DailyTasksScreen widget.
-/// {@endtemplate}
-class _SegmentedProgress extends StatefulWidget {
-  /// {@macro daily_tasks_screen}
-  const _SegmentedProgress({
-    super.key, // ignore: unused_element
-  });
+class SegmentedLinearProgressIndicator extends StatelessWidget {
+  final int maxValue;
+  final int currentValue;
+  final Color primaryColor;
+  final Color secondaryColor;
 
-  /// The state from the closest instance of this class
-  /// that encloses the given context, if any.
-  @internal
-  static _SegmentedProgressState? maybeOf(BuildContext context) =>
-      context.findAncestorStateOfType<_SegmentedProgressState>();
+  const SegmentedLinearProgressIndicator({
+    required this.maxValue,
+    required this.currentValue,
+    this.primaryColor = Colors.blue,
+    this.secondaryColor = Colors.grey,
+  }) : assert(maxValue <= 15, 'maxValue cannot be greater than 15');
 
   @override
-  State<_SegmentedProgress> createState() => _SegmentedProgressState();
+  Widget build(BuildContext context) => LayoutBuilder(
+        builder: (context, constraints) {
+          final segmentWidth = constraints.maxWidth / maxValue;
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: List.generate(
+              maxValue,
+              (index) => SizedBox(
+                width: segmentWidth,
+                height: 20, // Adjust height as needed
+                child: CustomPaint(
+                  painter: _SegmentPainter(
+                    isFilled: index < currentValue,
+                    primaryColor: primaryColor,
+                    secondaryColor: secondaryColor,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      );
 }
 
-/// State for widget DailyTasksScreen.
-class _SegmentedProgressState extends State<_SegmentedProgress> {
-  /* #region Lifecycle */
+class _SegmentPainter extends CustomPainter {
+  final bool isFilled;
+  final Color primaryColor;
+  final Color secondaryColor;
+
+  _SegmentPainter({
+    required this.isFilled,
+    required this.primaryColor,
+    required this.secondaryColor,
+  });
+
   @override
-  void initState() {
-    super.initState();
-    // Initial state initialization
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = isFilled ? primaryColor : secondaryColor
+      ..style = PaintingStyle.fill;
+
+    final path = Path();
+    path.moveTo(0, size.height * 0.25); // Top-left
+    path.lineTo(size.width * 0.75, 0); // Top-right
+    path.lineTo(size.width, size.height * 0.75); // Bottom-right
+    path.lineTo(size.width * 0.25, size.height); // Bottom-left
+    path.close();
+
+    canvas.drawPath(path, paint);
   }
 
   @override
-  void didUpdateWidget(covariant _SegmentedProgress oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // Widget configuration changed
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // The configuration of InheritedWidgets has changed
-    // Also called after initState but before build
-  }
-
-  @override
-  void dispose() {
-    // Permanent removal of a tree stent
-    super.dispose();
-  }
-  /* #endregion */
-
-  @override
-  Widget build(BuildContext context) => ElevatedCard(
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Expanded(
-                // child: LinearProgressIndicator(
-                //   value: currentWeight / targetWeight,
-                // ),
-                // Segmented linear progress indicator. Has max value and current value.
-                // Creates segments
-                ),
-            Space.sm(),
-            Text(
-              'Выполнено: $currentWeight/$targetWeight',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
-      );
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

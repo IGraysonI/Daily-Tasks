@@ -1,4 +1,5 @@
 import 'package:daily_tasks/src/core/utils/extensions/date_time_extension.dart';
+import 'package:daily_tasks/src/core/widget/segmented_linear_progress_indicator.dart';
 import 'package:daily_tasks/src/core/widget/space.dart';
 import 'package:flutter/material.dart';
 
@@ -49,6 +50,7 @@ class DailyTasksScreen extends StatefulWidget {
 
 class _DailyTasksScreenState extends State<DailyTasksScreen> {
   final _todaysDate = DateTime.now();
+  final List<_DailyTask> _mockUpTasks = _DailyTask.mockUpTasks;
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -65,104 +67,43 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> {
               child: Space.sm(),
             ),
             SliverToBoxAdapter(
-              child: _SegmentedLinearProgressIndicator(
+              child: SegmentedLinearProgressIndicator(
                 maxValue: _targetWeight,
                 currentValue: _currentWeight,
-                primaryColor: Colors.green,
-                secondaryColor: Colors.grey.shade300,
+                filledColor: Colors.green,
+                emptyColor: Colors.grey.shade300,
               ),
             ),
+            SliverToBoxAdapter(child: Space.sm()),
+            const SliverToBoxAdapter(child: Divider()),
             SliverToBoxAdapter(
-              child: Space.sm(),
+              child: Text(
+                'Список задач',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             ),
+            SliverToBoxAdapter(child: Space.sm()),
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) => ListTile(
-                  title: Text('Task $index'),
-                  subtitle: const Text('Description'),
-                  trailing: const Row(
+                  title: Text(_mockUpTasks[index].title),
+                  subtitle: Text(_mockUpTasks[index].description),
+                  trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     spacing: 8,
                     children: [
-                      Text('Value'),
-                      Icon(Icons.check_circle),
+                      Text(
+                        '${_mockUpTasks[index].weight}',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      const Icon(Icons.check_circle),
                     ],
                   ),
                 ),
-                childCount: 10,
+                childCount: _mockUpTasks.length,
               ),
             ),
           ],
         ),
       );
-}
-
-class _SegmentedLinearProgressIndicator extends StatelessWidget {
-  final int maxValue;
-  final int currentValue;
-  final Color primaryColor;
-  final Color secondaryColor;
-
-  const _SegmentedLinearProgressIndicator({
-    required this.maxValue,
-    required this.currentValue,
-    this.primaryColor = Colors.blue,
-    this.secondaryColor = Colors.grey,
-  }) : assert(maxValue <= 15, 'maxValue cannot be greater than 15');
-
-  @override
-  Widget build(BuildContext context) => LayoutBuilder(
-        builder: (context, constraints) {
-          final segmentWidth = constraints.maxWidth / maxValue;
-          return Row(
-            mainAxisSize: MainAxisSize.min,
-            children: List.generate(
-              maxValue,
-              (index) => SizedBox(
-                width: segmentWidth,
-                height: 20,
-                child: CustomPaint(
-                  painter: _SegmentPainter(
-                    isFilled: index < currentValue,
-                    primaryColor: primaryColor,
-                    secondaryColor: secondaryColor,
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      );
-}
-
-class _SegmentPainter extends CustomPainter {
-  final bool isFilled;
-  final Color primaryColor;
-  final Color secondaryColor;
-
-  _SegmentPainter({
-    required this.isFilled,
-    required this.primaryColor,
-    required this.secondaryColor,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = isFilled ? primaryColor : secondaryColor
-      ..style = PaintingStyle.fill;
-    const tiltOffset = 20.0;
-
-    final path = Path()
-      ..moveTo(tiltOffset, 0)
-      ..lineTo(size.width, 0)
-      ..lineTo(size.width - tiltOffset, size.height)
-      ..lineTo(0, size.height)
-      ..close();
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

@@ -65,7 +65,7 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> {
               child: Space.sm(),
             ),
             SliverToBoxAdapter(
-              child: SegmentedLinearProgressIndicator(
+              child: _SegmentedLinearProgressIndicator(
                 maxValue: _targetWeight,
                 currentValue: _currentWeight,
                 primaryColor: Colors.green,
@@ -97,13 +97,13 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> {
       );
 }
 
-class SegmentedLinearProgressIndicator extends StatelessWidget {
+class _SegmentedLinearProgressIndicator extends StatelessWidget {
   final int maxValue;
   final int currentValue;
   final Color primaryColor;
   final Color secondaryColor;
 
-  const SegmentedLinearProgressIndicator({
+  const _SegmentedLinearProgressIndicator({
     required this.maxValue,
     required this.currentValue,
     this.primaryColor = Colors.blue,
@@ -120,7 +120,7 @@ class SegmentedLinearProgressIndicator extends StatelessWidget {
               maxValue,
               (index) => SizedBox(
                 width: segmentWidth,
-                height: 20, // Adjust height as needed
+                height: 20,
                 child: CustomPaint(
                   painter: _SegmentPainter(
                     isFilled: index < currentValue,
@@ -151,13 +151,14 @@ class _SegmentPainter extends CustomPainter {
     final paint = Paint()
       ..color = isFilled ? primaryColor : secondaryColor
       ..style = PaintingStyle.fill;
+    const tiltOffset = 20.0;
 
-    final path = Path();
-    path.moveTo(0, size.height * 0.25); // Top-left
-    path.lineTo(size.width * 0.75, 0); // Top-right
-    path.lineTo(size.width, size.height * 0.75); // Bottom-right
-    path.lineTo(size.width * 0.25, size.height); // Bottom-left
-    path.close();
+    final path = Path()
+      ..moveTo(tiltOffset, 0)
+      ..lineTo(size.width, 0)
+      ..lineTo(size.width - tiltOffset, size.height)
+      ..lineTo(0, size.height)
+      ..close();
 
     canvas.drawPath(path, paint);
   }

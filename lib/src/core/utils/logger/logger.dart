@@ -1,8 +1,6 @@
 import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
 
-// TODO: Cut and use l logger package?
-
 /// {@template app_logger}
 /// Logger class, that manages the logging of messages
 /// {@endtemplate}

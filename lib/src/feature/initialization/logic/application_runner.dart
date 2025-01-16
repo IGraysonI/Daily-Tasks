@@ -35,7 +35,7 @@ sealed class ApplicationRunner {
         FlutterError.onError = logger.logFlutterError;
         WidgetsBinding.instance.platformDispatcher.onError = logger.logPlatformDispatcherError;
 
-        // TODO: Add controller observer
+        // TODO(Grayson): Add controller observer
         // Setup bloc observer and transformer
         // Bloc.observer = AppBlocObserver(logger);
         // Bloc.transformer = SequentialBlocTransformer().transform;

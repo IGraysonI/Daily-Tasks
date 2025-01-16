@@ -148,7 +148,7 @@ abstract base class _$ApplicationSettingStateBase extends StateBase<ApplicationS
       );
 
   @override
-  // TODO: add more properties
+  // TODO(Grayson): add more properties
   String toString() {
     final buffer = StringBuffer()
       ..write('SettingState(')

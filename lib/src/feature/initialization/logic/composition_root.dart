@@ -148,7 +148,7 @@ class ApplicationLoggerFactory extends Factory<AppLogger> {
 /// {@template error_reporter_factory}
 /// Factory that creates an instance of [ErrorReporter].
 /// {@endtemplate}
-// TODO: Add sentry
+// TODO(Grayson): Add sentry?
 // class ErrorReporterFactory extends AsyncFactory<ErrorReporter> {
 //   /// {@macro error_reporter_factory}
 //   const ErrorReporterFactory(this.config);

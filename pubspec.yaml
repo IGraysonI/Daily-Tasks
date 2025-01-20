@@ -7,9 +7,9 @@ environment:
   sdk: ">=3.6.0 <4.0.0"
   flutter: ">=3.27.1 <4.0.0"
 
-# workspace:
+workspace:
 #   - packages/rest_client
-#   - packages/application_database
+  - packages/app_database
 
 dependencies:
   flutter:
@@ -36,6 +36,10 @@ dependencies:
   # Utils
   clock: ^1.1.1
   package_info_plus: ^8.1.2
+
+  # Packages
+  app_database:
+    path: packages/app_database
 
 dev_dependencies:
   flutter_test:

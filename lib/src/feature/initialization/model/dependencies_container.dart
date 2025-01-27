@@ -1,3 +1,4 @@
+import 'package:app_database/app_database.dart';
 import 'package:daily_tasks/src/core/constant/application_config.dart';
 import 'package:daily_tasks/src/core/utils/logger/logger.dart';
 import 'package:daily_tasks/src/feature/settings/controller/settings_controller.dart';
@@ -15,6 +16,7 @@ class DependenciesContainer {
     required this.config,
     required this.applicationSettingsController,
     required this.packageInfo,
+    required this.appDatabase,
   });
 
   /// [Logger] instance, used to log messages.
@@ -28,6 +30,9 @@ class DependenciesContainer {
 
   /// [PackageInfo] instance, contains information about the application.
   final PackageInfo packageInfo;
+
+  /// [AppDatabase] instance, used to interact with the database.
+  final AppDatabase appDatabase;
 }
 
 /// {@template testing_dependencies_container}

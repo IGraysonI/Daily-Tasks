@@ -1,3 +1,4 @@
+import 'package:app_database/app_database.dart';
 import 'package:clock/clock.dart';
 import 'package:daily_tasks/src/core/constant/application_config.dart';
 import 'package:daily_tasks/src/core/utils/error_reporter/error_reporter.dart';
@@ -122,11 +123,13 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
     final sharedPreferences = SharedPreferencesAsync();
     final packageInfo = await PackageInfo.fromPlatform();
     final applicationSettingsController = await ApplicationSettingsControllerFactory(sharedPreferences).create();
+    final appDatabase = await const AppDatabaseFactory().create();
     return DependenciesContainer(
       logger: logger,
       config: config,
       applicationSettingsController: applicationSettingsController,
       packageInfo: packageInfo,
+      appDatabase: appDatabase,
     );
   }
 }
@@ -197,4 +200,15 @@ class ApplicationSettingsControllerFactory extends AsyncFactory<ApplicationSetti
       initialState: initialState,
     );
   }
+}
+
+/// {@template composition_root}
+/// Factory that creates an instance of [AppDatabase].
+/// {@endtemplate}
+class AppDatabaseFactory extends AsyncFactory<AppDatabase> {
+  /// {@macro app_database_factory}
+  const AppDatabaseFactory();
+
+  @override
+  Future<AppDatabase> create() async => await AppDatabase.openDatabase();
 }

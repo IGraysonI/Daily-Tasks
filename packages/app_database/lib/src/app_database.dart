@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:l/l.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 
 export 'package:app_database/src/base/base_schema.dart';
 export 'package:drift/drift.dart' hide Column, JsonKey;

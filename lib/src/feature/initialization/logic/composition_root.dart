@@ -5,7 +5,6 @@ import 'package:daily_tasks/src/core/utils/error_reporter/error_reporter.dart';
 import 'package:daily_tasks/src/core/utils/logger/logger.dart';
 import 'package:daily_tasks/src/feature/initialization/model/dependencies_container.dart';
 import 'package:daily_tasks/src/feature/settings/controller/application_settings_controller.dart';
-import 'package:daily_tasks/src/feature/settings/controller/application_settings_state.dart';
 import 'package:daily_tasks/src/feature/settings/data/application_settings_datasource.dart';
 import 'package:daily_tasks/src/feature/settings/data/application_settings_repository.dart';
 import 'package:package_info_plus/package_info_plus.dart';

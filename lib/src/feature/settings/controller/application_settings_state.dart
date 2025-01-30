@@ -1,6 +1,4 @@
-import 'package:daily_tasks/src/core/utils/controller/state_base.dart';
-import 'package:daily_tasks/src/feature/settings/model/application_settings.dart';
-import 'package:meta/meta.dart';
+part of 'application_settings_controller.dart';
 
 /// Pattern matching for [ApplicationSettingsState].
 typedef ApplicationSettingsStateMatch<R, S extends ApplicationSettingsState> = R Function(S state);

@@ -1,7 +1,7 @@
 import 'package:app_database/app_database.dart';
 import 'package:daily_tasks/src/core/constant/application_config.dart';
 import 'package:daily_tasks/src/core/utils/logger/logger.dart';
-import 'package:daily_tasks/src/feature/settings/controller/settings_controller.dart';
+import 'package:daily_tasks/src/feature/settings/controller/application_settings_controller.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 /// {@template dependencies_container}

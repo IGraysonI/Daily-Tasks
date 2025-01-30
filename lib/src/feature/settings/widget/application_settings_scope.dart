@@ -1,7 +1,7 @@
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/feature/initialization/widget/dependencies_scope.dart';
+import 'package:daily_tasks/src/feature/settings/controller/application_settings_controller.dart';
 import 'package:daily_tasks/src/feature/settings/controller/application_settings_state.dart';
-import 'package:daily_tasks/src/feature/settings/controller/settings_controller.dart';
 import 'package:daily_tasks/src/feature/settings/model/application_settings.dart';
 import 'package:flutter/widgets.dart';
 

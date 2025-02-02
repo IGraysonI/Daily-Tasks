@@ -20,7 +20,7 @@ final class DailyTasksController extends StateController<DailyTasksState> with D
 
   /// Sets the new application settings.
   // void updateDailyTasks({required DailyTasks DailyTasks}) => handle(
-  //       () async {
+//       () async {
   //         setState(
   //           DailyTasksState.processing(
   //             DailyTasks: state.DailyTasks,

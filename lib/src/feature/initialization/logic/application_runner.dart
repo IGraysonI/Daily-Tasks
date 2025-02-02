@@ -19,13 +19,13 @@ sealed class ApplicationRunner {
   /// Initializes dependencies and launches the application within a guarded execution zone.
   static Future<void> startup() async {
     const config = ApplicationConfig();
-    // final errorReporter = await const ErrorReporterFactory(config).create();
-    final logger = const ApplicationLoggerFactory(
+    // final errorReporter = await createErrorReporter(config);
+    final logger = createAppLogger(
       observers: [
         // ErrorReporterLogObserver(errorReporter),
-        if (!kReleaseMode) PrintingLogObserver(logLevel: LogLevel.trace),
+        if (!kReleaseMode) const PrintingLogObserver(logLevel: LogLevel.trace),
       ],
-    ).create();
+    );
     await runZonedGuarded(
       () async {
         // Ensure Flutter is initialized

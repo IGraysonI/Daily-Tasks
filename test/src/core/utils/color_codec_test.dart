@@ -11,6 +11,7 @@ void main() {
         'should match the color when encoding and decoding',
         () {
           const color = Color(0xFF000000);
+          const colorCodec = ColorCodec();
           final encodedColor = colorCodec.encode(color);
           final decodedColor = colorCodec.decode(encodedColor);
           expect(decodedColor, color);
@@ -20,6 +21,7 @@ void main() {
       test(
         'should match the color when encoding and decoding with alpha, red, green and blue',
         () {
+          const colorCodec = ColorCodec();
           const color = Color.fromARGB(0, 107, 107, 174);
           final encodedColor = colorCodec.encode(color);
           final decodedColor = colorCodec.decode(encodedColor);

@@ -43,4 +43,36 @@ final class DailyTasksController extends StateController<DailyTasksState> with D
   //         ),
   //       ),
   //     );
+
+  // Get the list of [DailyTasks]
+  void getDailyTasks() => handle(
+        () async {
+          setState(
+            DailyTasksState.processing(
+              dailyTasks: state.dailyTasks ?? [],
+              message: 'Preparing to get daily tasks',
+            ),
+          );
+          final dailyTasks = await _dailyTasksRepository.getDailyTasks();
+          setState(
+            DailyTasksState.successful(
+              dailyTasks: dailyTasks,
+              message: 'Daily tasks retrieved',
+            ),
+          );
+        },
+        error: (error, _) async => setState(
+          DailyTasksState.error(
+            dailyTasks: state.dailyTasks ?? [],
+            error: error,
+            message: 'Failed to get daily tasks',
+          ),
+        ),
+        done: () async => setState(
+          DailyTasksState.idle(
+            dailyTasks: state.dailyTasks ?? [],
+            message: 'Daily tasks idle',
+          ),
+        ),
+      );
 }

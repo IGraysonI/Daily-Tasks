@@ -25,6 +25,13 @@ sealed class ApplicationSettingsState extends _$ApplicationSettingStateBase {
     String message,
   }) = ApplicationSettingState$Processing;
 
+  /// Successful
+  /// {@macro setting_state}
+  const factory ApplicationSettingsState.successful({
+    ApplicationSettings? applicationSettings,
+    String message,
+  }) = ApplicationSettingState$Successful;
+
   /// An error has occurred
   /// {@macro setting_state}
   const factory ApplicationSettingsState.error({
@@ -53,6 +60,17 @@ final class ApplicationSettingState$Processing extends ApplicationSettingsState 
   const ApplicationSettingState$Processing({
     super.applicationSettings,
     super.message = 'Processing ',
+  });
+}
+
+/// {@template SettingState$Successful}
+/// Successful
+/// {@endtemplate}
+final class ApplicationSettingState$Successful extends ApplicationSettingsState {
+  /// Successful
+  const ApplicationSettingState$Successful({
+    super.applicationSettings,
+    super.message = 'Successful',
   });
 }
 
@@ -87,11 +105,13 @@ abstract base class _$ApplicationSettingStateBase extends StateBase<ApplicationS
   R map<R>({
     required ApplicationSettingsStateMatch<R, ApplicationSettingState$Idle> idle,
     required ApplicationSettingsStateMatch<R, ApplicationSettingState$Processing> processing,
+    required ApplicationSettingsStateMatch<R, ApplicationSettingState$Successful> successful,
     required ApplicationSettingsStateMatch<R, ApplicationSettingState$Error> error,
   }) =>
       switch (this) {
         final ApplicationSettingState$Idle s => idle(s),
         final ApplicationSettingState$Processing s => processing(s),
+        final ApplicationSettingState$Successful s => successful(s),
         final ApplicationSettingState$Error s => error(s),
         _ => throw AssertionError(),
       };
@@ -102,11 +122,13 @@ abstract base class _$ApplicationSettingStateBase extends StateBase<ApplicationS
     required R Function() orElse,
     ApplicationSettingsStateMatch<R, ApplicationSettingState$Idle>? idle,
     ApplicationSettingsStateMatch<R, ApplicationSettingState$Processing>? processing,
+    ApplicationSettingsStateMatch<R, ApplicationSettingState$Successful>? successful,
     ApplicationSettingsStateMatch<R, ApplicationSettingState$Error>? error,
   }) =>
       map<R>(
         idle: idle ?? (_) => orElse(),
         processing: processing ?? (_) => orElse(),
+        successful: successful ?? (_) => orElse(),
         error: error ?? (_) => orElse(),
       );
 
@@ -115,11 +137,13 @@ abstract base class _$ApplicationSettingStateBase extends StateBase<ApplicationS
   R? mapOrNull<R>({
     ApplicationSettingsStateMatch<R, ApplicationSettingState$Idle>? idle,
     ApplicationSettingsStateMatch<R, ApplicationSettingState$Processing>? processing,
+    ApplicationSettingsStateMatch<R, ApplicationSettingState$Successful>? successful,
     ApplicationSettingsStateMatch<R, ApplicationSettingState$Error>? error,
   }) =>
       map<R?>(
         idle: idle ?? (_) => null,
         processing: processing ?? (_) => null,
+        successful: successful ?? (_) => null,
         error: error ?? (_) => null,
       );
 
@@ -136,6 +160,10 @@ abstract base class _$ApplicationSettingStateBase extends StateBase<ApplicationS
           message: message ?? s.message,
         ),
         processing: (s) => s.copyWith(
+          applicationSettings: applicationSettings ?? s.applicationSettings,
+          message: message ?? s.message,
+        ),
+        successful: (s) => s.copyWith(
           applicationSettings: applicationSettings ?? s.applicationSettings,
           message: message ?? s.message,
         ),

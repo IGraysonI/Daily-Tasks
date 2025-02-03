@@ -28,6 +28,7 @@ abstract base class StateBase<T> {
   R map<R>({
     required StateBaseMatch<R, T> idle,
     required StateBaseMatch<R, T> processing,
+    required StateBaseMatch<R, T> successful,
     required StateBaseMatch<R, T> error,
   });
 
@@ -36,6 +37,7 @@ abstract base class StateBase<T> {
     required R Function() orElse,
     StateBaseMatch<R, T> idle,
     StateBaseMatch<R, T> processing,
+    StateBaseMatch<R, T> successful,
     StateBaseMatch<R, T> error,
   });
 
@@ -43,6 +45,7 @@ abstract base class StateBase<T> {
   R? mapOrNull<R>({
     StateBaseMatch<R, T> idle,
     StateBaseMatch<R, T> processing,
+    StateBaseMatch<R, T> successful,
     StateBaseMatch<R, T> error,
   });
 

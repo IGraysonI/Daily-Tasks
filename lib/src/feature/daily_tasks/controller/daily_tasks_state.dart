@@ -14,22 +14,29 @@ sealed class DailyTasksState extends _$DailyTaskStateBase {
   /// Idling state
   /// {@macro daily_tasks_state}
   const factory DailyTasksState.idle({
-    List<DailyTask> dailyTasks,
+    required List<DailyTask> dailyTasks,
     String message,
   }) = DailyTaskState$Idle;
 
   /// Processing
   /// {@macro daily_tasks_state}
   const factory DailyTasksState.processing({
-    List<DailyTask> dailyTasks,
+    required List<DailyTask> dailyTasks,
     String message,
   }) = DailyTaskState$Processing;
+
+  /// Successful
+  /// {@macro daily_tasks_state}
+  const factory DailyTasksState.successful({
+    required List<DailyTask> dailyTasks,
+    String message,
+  }) = DailyTaskState$Successful;
 
   /// An error has occurred
   /// {@macro daily_tasks_state}
   const factory DailyTasksState.error({
     required Object error,
-    List<DailyTask>? dailyTasks,
+    required List<DailyTask>? dailyTasks,
     String message,
   }) = DailyTaskState$Error;
 }
@@ -40,7 +47,7 @@ sealed class DailyTasksState extends _$DailyTaskStateBase {
 final class DailyTaskState$Idle extends DailyTasksState {
   /// Idling state
   const DailyTaskState$Idle({
-    super.dailyTasks,
+    required super.dailyTasks,
     super.message = 'Idling',
   });
 }
@@ -51,8 +58,19 @@ final class DailyTaskState$Idle extends DailyTasksState {
 final class DailyTaskState$Processing extends DailyTasksState {
   /// Processing
   const DailyTaskState$Processing({
-    super.dailyTasks,
+    required super.dailyTasks,
     super.message = 'Processing ',
+  });
+}
+
+/// {@template DailyTasksState$Successful}
+/// Successful
+/// {@endtemplate}
+final class DailyTaskState$Successful extends DailyTasksState {
+  /// Successful
+  const DailyTaskState$Successful({
+    required super.dailyTasks,
+    super.message = 'Successful',
   });
 }
 
@@ -63,7 +81,7 @@ final class DailyTaskState$Error extends DailyTasksState {
   /// An error has occurred
   const DailyTaskState$Error({
     required this.error,
-    super.dailyTasks,
+    required super.dailyTasks,
     super.message = 'An error has occurred',
   });
 
@@ -87,11 +105,13 @@ abstract base class _$DailyTaskStateBase extends StateBase<DailyTasksState> {
   R map<R>({
     required DailyTasksStateMatch<R, DailyTaskState$Idle> idle,
     required DailyTasksStateMatch<R, DailyTaskState$Processing> processing,
+    required DailyTasksStateMatch<R, DailyTaskState$Successful> successful,
     required DailyTasksStateMatch<R, DailyTaskState$Error> error,
   }) =>
       switch (this) {
         final DailyTaskState$Idle s => idle(s),
         final DailyTaskState$Processing s => processing(s),
+        final DailyTaskState$Successful s => successful(s),
         final DailyTaskState$Error s => error(s),
         _ => throw AssertionError(),
       };
@@ -102,11 +122,13 @@ abstract base class _$DailyTaskStateBase extends StateBase<DailyTasksState> {
     required R Function() orElse,
     DailyTasksStateMatch<R, DailyTaskState$Idle>? idle,
     DailyTasksStateMatch<R, DailyTaskState$Processing>? processing,
+    DailyTasksStateMatch<R, DailyTaskState$Successful>? successful,
     DailyTasksStateMatch<R, DailyTaskState$Error>? error,
   }) =>
       map<R>(
         idle: idle ?? (_) => orElse(),
         processing: processing ?? (_) => orElse(),
+        successful: successful ?? (_) => orElse(),
         error: error ?? (_) => orElse(),
       );
 
@@ -115,11 +137,13 @@ abstract base class _$DailyTaskStateBase extends StateBase<DailyTasksState> {
   R? mapOrNull<R>({
     DailyTasksStateMatch<R, DailyTaskState$Idle>? idle,
     DailyTasksStateMatch<R, DailyTaskState$Processing>? processing,
+    DailyTasksStateMatch<R, DailyTaskState$Successful>? successful,
     DailyTasksStateMatch<R, DailyTaskState$Error>? error,
   }) =>
       map<R?>(
         idle: idle ?? (_) => null,
         processing: processing ?? (_) => null,
+        successful: successful ?? (_) => null,
         error: error ?? (_) => null,
       );
 
@@ -136,6 +160,10 @@ abstract base class _$DailyTaskStateBase extends StateBase<DailyTasksState> {
           message: message ?? s.message,
         ),
         processing: (s) => s.copyWith(
+          dailyTasks: dailyTasks ?? s.dailyTasks,
+          message: message ?? s.message,
+        ),
+        successful: (s) => s.copyWith(
           dailyTasks: dailyTasks ?? s.dailyTasks,
           message: message ?? s.message,
         ),

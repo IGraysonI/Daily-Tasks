@@ -16,18 +16,15 @@ final class DailyTasksRepositoryImpl implements DailyTasksRepository {
   /// {@macro app_settings_repository}
   // const DailyTasksRepositoryImpl({required this.datasource});
   const DailyTasksRepositoryImpl();
+  // TODO(Grayson): Add datasource?
 
   @override
   Future<void> createDailyTask(DailyTask dailyTask) {
-    // TODO: implement createDailyTask
+    // TODO(Grayson): implement createDailyTask
     throw UnimplementedError();
   }
 
+  // TODO(Grayson): implement getDailyTasks
   @override
-  Future<List<DailyTask>> getDailyTasks() {
-    // TODO: implement getDailyTasks
-    throw UnimplementedError();
-  }
-
-  // TODO (Grayson): Add datasource?
+  Future<List<DailyTask>> getDailyTasks() async => [];
 }

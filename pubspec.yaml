@@ -53,9 +53,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
-  # assets:
-    # Add assets from the images directory to the application.
-    # - assets/images/
+  assets:
+    - assets/images/
 
 flutter_gen:
   output: lib/src/core/constant/generated

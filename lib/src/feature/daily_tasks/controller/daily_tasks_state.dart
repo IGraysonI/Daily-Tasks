@@ -36,7 +36,7 @@ sealed class DailyTasksState extends _$DailyTaskStateBase {
   /// {@macro daily_tasks_state}
   const factory DailyTasksState.error({
     required Object error,
-    required List<DailyTask>? dailyTasks,
+    required List<DailyTask> dailyTasks,
     String message,
   }) = DailyTaskState$Error;
 }
@@ -98,7 +98,7 @@ abstract base class _$DailyTaskStateBase extends StateBase<DailyTasksState> {
 
   /// List of the daily tasks.
   @nonVirtual
-  final List<DailyTask>? dailyTasks;
+  final List<DailyTask> dailyTasks;
 
   /// Pattern matching for [DailyTasksState].
   @override

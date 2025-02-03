@@ -18,38 +18,38 @@ final class DailyTasksController extends StateController<DailyTasksState> with D
 
   final DailyTasksRepository _dailyTasksRepository;
 
-  /// Sets the new application settings.
-  // void updateDailyTasks({required DailyTasks DailyTasks}) => handle(
-//       () async {
-  //         setState(
-  //           DailyTasksState.processing(
-  //             DailyTasks: state.DailyTasks,
-  //             message: 'Updating theme',
-  //           ),
-  //         );
-  //         await _dailyTasksRepository.setDailyTasks(DailyTasks);
-  //       },
-  //       error: (error, _) async => setState(
-  //         DailyTasksState.error(
-  //           DailyTasks: state.DailyTasks,
-  //           error: error,
-  //           message: 'Failed to update theme',
-  //         ),
-  //       ),
-  //       done: () async => setState(
-  //         DailyTasksState.idle(
-  //           DailyTasks: DailyTasks,
-  //           message: 'Theme updated',
-  //         ),
-  //       ),
-  //     );
+  /// Add a new [DailyTask]
+  void createDailyTasks(DailyTask dailyTask) => handle(
+        () async {
+          setState(
+            DailyTasksState.processing(
+              dailyTasks: state.dailyTasks,
+              message: 'Updating theme',
+            ),
+          );
+          await _dailyTasksRepository.createDailyTask(dailyTask);
+        },
+        error: (error, _) async => setState(
+          DailyTasksState.error(
+            dailyTasks: state.dailyTasks,
+            error: error,
+            message: 'Failed to update theme',
+          ),
+        ),
+        done: () async => setState(
+          DailyTasksState.idle(
+            dailyTasks: state.dailyTasks,
+            message: 'Theme updated',
+          ),
+        ),
+      );
 
-  // Get the list of [DailyTasks]
+  /// Get the list of [DailyTask]
   void getDailyTasks() => handle(
         () async {
           setState(
             DailyTasksState.processing(
-              dailyTasks: state.dailyTasks ?? [],
+              dailyTasks: state.dailyTasks,
               message: 'Preparing to get daily tasks',
             ),
           );
@@ -63,14 +63,14 @@ final class DailyTasksController extends StateController<DailyTasksState> with D
         },
         error: (error, _) async => setState(
           DailyTasksState.error(
-            dailyTasks: state.dailyTasks ?? [],
+            dailyTasks: state.dailyTasks,
             error: error,
             message: 'Failed to get daily tasks',
           ),
         ),
         done: () async => setState(
           DailyTasksState.idle(
-            dailyTasks: state.dailyTasks ?? [],
+            dailyTasks: state.dailyTasks,
             message: 'Daily tasks idle',
           ),
         ),

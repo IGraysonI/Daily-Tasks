@@ -1,5 +1,6 @@
 import 'package:app_database/app_database.dart';
 import 'package:control/control.dart';
+import 'package:daily_tasks/src/core/enum/tasks_action_enum.dart';
 import 'package:daily_tasks/src/core/utils/controller/state_base.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_repository.dart';
 import 'package:meta/meta.dart';
@@ -19,7 +20,11 @@ final class DailyTasksController extends StateController<DailyTasksState> with D
   final DailyTasksRepository _dailyTasksRepository;
 
   /// Add a new [DailyTaskModel]
-  void createDailyTasks(DailyTaskModel dailyTask) => handle(
+  void manageDailyTasks(
+    DailyTaskModel dailyTask,
+    TasksActionEnum action,
+  ) =>
+      handle(
         () async {
           setState(
             DailyTasksState.processing(
@@ -27,7 +32,7 @@ final class DailyTasksController extends StateController<DailyTasksState> with D
               message: 'Updating theme',
             ),
           );
-          await _dailyTasksRepository.createDailyTask(dailyTask);
+          await _dailyTasksRepository.manageDailyTasks(dailyTask, action);
         },
         error: (error, _) async => setState(
           DailyTasksState.error(

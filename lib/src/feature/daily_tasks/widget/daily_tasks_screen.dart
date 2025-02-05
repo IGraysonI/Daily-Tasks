@@ -1,9 +1,11 @@
+import 'package:app_database/app_database.dart';
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/core/utils/extensions/date_time_extension.dart';
 import 'package:daily_tasks/src/core/widget/no_data_widget.dart';
 import 'package:daily_tasks/src/core/widget/segmented_linear_progress_indicator.dart';
 import 'package:daily_tasks/src/core/widget/space.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/controller/daily_tasks_controller.dart';
+import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_datasource.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_repository.dart';
 import 'package:daily_tasks/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +38,11 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> {
   void initState() {
     super.initState();
     _dailyTasksController = DailyTasksController(
-      dailyTasksRepository: const DailyTasksRepositoryImpl(),
+      dailyTasksRepository: DailyTasksRepositoryImpl(
+        dailyTasksDatasource: DailyTasksDatasourceImpl(
+          localDataProvider: LocalDataProvider(DependenciesScope.of(context).appDatabase),
+        ),
+      ),
       initialState: const DailyTasksState.idle(dailyTasks: []),
     );
   }

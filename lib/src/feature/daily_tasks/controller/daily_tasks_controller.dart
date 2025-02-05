@@ -1,7 +1,7 @@
+import 'package:app_database/app_database.dart';
 import 'package:control/control.dart';
 import 'package:daily_tasks/src/core/utils/controller/state_base.dart';
 import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_repository.dart';
-import 'package:daily_tasks/src/feature/daily_tasks/model/daily_task.dart';
 import 'package:meta/meta.dart';
 
 part 'daily_tasks_state.dart';
@@ -18,8 +18,8 @@ final class DailyTasksController extends StateController<DailyTasksState> with D
 
   final DailyTasksRepository _dailyTasksRepository;
 
-  /// Add a new [DailyTask]
-  void createDailyTasks(DailyTask dailyTask) => handle(
+  /// Add a new [DailyTaskModel]
+  void createDailyTasks(DailyTaskModel dailyTask) => handle(
         () async {
           setState(
             DailyTasksState.processing(
@@ -44,7 +44,7 @@ final class DailyTasksController extends StateController<DailyTasksState> with D
         ),
       );
 
-  /// Get the list of [DailyTask]
+  /// Get the list of [DailyTaskModel]
   void getDailyTasks() => handle(
         () async {
           setState(

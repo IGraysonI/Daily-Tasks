@@ -14,21 +14,21 @@ sealed class DailyTasksState extends _$DailyTaskStateBase {
   /// Idling state
   /// {@macro daily_tasks_state}
   const factory DailyTasksState.idle({
-    required List<DailyTask> dailyTasks,
+    required List<DailyTaskModel> dailyTasks,
     String message,
   }) = DailyTaskState$Idle;
 
   /// Processing
   /// {@macro daily_tasks_state}
   const factory DailyTasksState.processing({
-    required List<DailyTask> dailyTasks,
+    required List<DailyTaskModel> dailyTasks,
     String message,
   }) = DailyTaskState$Processing;
 
   /// Successful
   /// {@macro daily_tasks_state}
   const factory DailyTasksState.successful({
-    required List<DailyTask> dailyTasks,
+    required List<DailyTaskModel> dailyTasks,
     String message,
   }) = DailyTaskState$Successful;
 
@@ -36,7 +36,7 @@ sealed class DailyTasksState extends _$DailyTaskStateBase {
   /// {@macro daily_tasks_state}
   const factory DailyTasksState.error({
     required Object error,
-    required List<DailyTask> dailyTasks,
+    required List<DailyTaskModel> dailyTasks,
     String message,
   }) = DailyTaskState$Error;
 }
@@ -98,7 +98,7 @@ abstract base class _$DailyTaskStateBase extends StateBase<DailyTasksState> {
 
   /// List of the daily tasks.
   @nonVirtual
-  final List<DailyTask> dailyTasks;
+  final List<DailyTaskModel> dailyTasks;
 
   /// Pattern matching for [DailyTasksState].
   @override
@@ -150,7 +150,7 @@ abstract base class _$DailyTaskStateBase extends StateBase<DailyTasksState> {
   /// Copy with method for [DailyTasksState].
   @override
   DailyTasksState copyWith({
-    List<DailyTask>? dailyTasks,
+    List<DailyTaskModel>? dailyTasks,
     String? message,
     String? error,
   }) =>

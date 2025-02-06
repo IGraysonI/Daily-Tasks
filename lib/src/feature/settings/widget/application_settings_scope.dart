@@ -45,6 +45,12 @@ class _ApplicationSettingsScopeState extends State<ApplicationSettingsScope> {
   }
 
   @override
+  void dispose() {
+    _applicationSettingsController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => StateConsumer<ApplicationSettingsController, ApplicationSettingsState>(
         controller: _applicationSettingsController,
         builder: (context, state, child) => _InheritedSettings(

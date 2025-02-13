@@ -1,6 +1,6 @@
-import 'dart:developer' as dev;
-
 import 'package:daily_tasks/src/core/utils/logger/logger.dart';
+import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 /// {@template printing_log_observer}
@@ -16,21 +16,15 @@ final class PrintingLogObserver with LogObserver {
   @override
   void onLog(LogMessage logMessage) {
     if (logMessage.level.index >= logLevel.index) {
-      final logLevelsLength = LogLevel.values.length;
-      final severityPerLevel = 2000 ~/ logLevelsLength;
-      final level = logMessage.level.index * severityPerLevel;
       StackTrace? stack;
-      if (logMessage.stackTrace case final stackTrace?) {
-        stack = Trace.from(stackTrace).terse;
-      }
-      dev.log(
-        logMessage.message,
-        time: logMessage.timestamp,
-        error: logMessage.error,
-        stackTrace: stack,
-        level: level,
-        name: logMessage.level.toShortName(),
-      );
+      if (logMessage.stackTrace case final stackTrace?) stack = Trace.from(stackTrace).terse;
+      final builder = StringBuffer()
+        ..write(DateFormat('MM-dd HH:mm:ss').format(logMessage.timestamp))
+        ..write(' [${logMessage.level.toShortName()}]')
+        ..write(' ${logMessage.message}');
+      if (logMessage.error case final error?) builder.write('\n$error');
+      if (stack != null) builder.write('\n$stack');
+      debugPrint(builder.toString());
     }
   }
 }

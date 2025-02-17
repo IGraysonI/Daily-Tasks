@@ -70,7 +70,6 @@ class _InheritedSettings extends InheritedWidget {
     required super.child,
     required this.state,
     required this.settings,
-    super.key, // ignore: unused_element
   });
 
   /// _SettingsScopeState instance.

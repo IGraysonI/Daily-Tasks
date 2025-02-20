@@ -9,6 +9,7 @@ import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_datasource.
 import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_repository.dart';
 import 'package:daily_tasks/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // TODO(Grayson): Добавить награды за определнные трешхолды выполненных задач.
 // Например, targetWeight = 10, если выполнено вес заполнен на 2, то одна награда, если на 5, то другая награда и т.д.
@@ -53,6 +54,86 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> {
     super.dispose();
   }
 
+  // TODO(Grayson): Перенести в отдельный виджет?
+  void _showAddTaskDialog(BuildContext context) {
+    final taskTitleController = TextEditingController();
+    final taskDescriptionController = TextEditingController();
+    final taskWeightController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Добавить задачу'),
+        content: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                controller: taskTitleController,
+                decoration: const InputDecoration(hintText: 'Название задачи'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Пожалуйста, введите название задачи';
+                  }
+                  return null;
+                },
+              ),
+              Space.sm(),
+              TextFormField(
+                controller: taskDescriptionController,
+                decoration: const InputDecoration(hintText: 'Описание задачи'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Пожалуйста, введите описание задачи';
+                  }
+                  return null;
+                },
+              ),
+              Space.sm(),
+              TextFormField(
+                controller: taskWeightController,
+                decoration: const InputDecoration(hintText: 'Вес задачи'),
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Пожалуйста, введите вес задачи';
+                  }
+                  return null;
+                },
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Отмена'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                ScaffoldMessenger.of(context)
+                  ..removeCurrentSnackBar()
+                  ..showSnackBar(
+                    const SnackBar(content: Text('Задача добавлена')),
+                  );
+              } else {
+                ScaffoldMessenger.of(context)
+                  ..removeCurrentSnackBar()
+                  ..showSnackBar(
+                    const SnackBar(content: Text('Пожалуйста, заполните все поля')),
+                  );
+              }
+            },
+            child: const Text('Добавить'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(16),
@@ -67,61 +148,59 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> {
             SliverToBoxAdapter(child: Space.sm()),
             StateConsumer<DailyTasksController, DailyTasksState>(
               controller: _dailyTasksController,
-              builder: (context, state, child) => state.maybeMap(
-                orElse: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
-                idle: (state) {
-                  if (state.dailyTasks.isEmpty) {
-                    return SliverToBoxAdapter(
-                      child: NoDataWidget(
-                        text: 'Задачи отсутствуют',
-                        buttonText: 'Добавить задачу',
-                        onPressed: () => DependenciesScope.of(context).logger.info('Add task'),
+              builder: (context, state, child) {
+                final dailyTasks = state.mapOrNull(idle: (state) => state.dailyTasks);
+                if (dailyTasks == null) return const SliverToBoxAdapter(child: SizedBox.shrink());
+                if (dailyTasks.isEmpty) {
+                  return SliverToBoxAdapter(
+                    child: NoDataWidget(
+                      text: 'Задачи отсутствуют',
+                      buttonText: 'Добавить задачу',
+                      onPressed: () => _showAddTaskDialog(context),
+                    ),
+                  );
+                }
+                return SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      SegmentedLinearProgressIndicator(
+                        maxValue: _targetWeight,
+                        currentValue: _currentWeight,
+                        filledColor: Colors.green,
+                        emptyColor: Colors.grey.shade300,
                       ),
-                    );
-                  } else {
-                    return SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          SegmentedLinearProgressIndicator(
-                            maxValue: _targetWeight,
-                            currentValue: _currentWeight,
-                            filledColor: Colors.green,
-                            emptyColor: Colors.grey.shade300,
-                          ),
-                          Space.sm(),
-                          const Divider(),
-                          Text(
-                            'Список задач',
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          Space.sm(),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: state.dailyTasks.length,
-                            itemBuilder: (context, index) {
-                              final task = state.dailyTasks[index];
-                              return ListTile(
-                                title: Text(task.title),
-                                subtitle: Text(task.description ?? ''),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      '${task.weight}',
-                                      style: Theme.of(context).textTheme.labelLarge,
-                                    ),
-                                    const Icon(Icons.check_circle),
-                                  ],
+                      Space.sm(),
+                      const Divider(),
+                      Text(
+                        'Список задач',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      Space.sm(),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: dailyTasks.length,
+                        itemBuilder: (context, index) {
+                          final dailyTask = dailyTasks[index];
+                          return ListTile(
+                            title: Text(dailyTask.title),
+                            subtitle: Text(dailyTask.description ?? ''),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  '${dailyTask.weight}',
+                                  style: Theme.of(context).textTheme.labelLarge,
                                 ),
-                              );
-                            },
-                          ),
-                        ],
+                                const Icon(Icons.check_circle),
+                              ],
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  }
-                },
-              ),
+                    ],
+                  ),
+                );
+              },
             ),
           ],
         ),

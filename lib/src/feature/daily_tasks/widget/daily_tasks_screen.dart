@@ -1,5 +1,6 @@
 import 'package:app_database/app_database.dart';
 import 'package:control/control.dart';
+import 'package:daily_tasks/src/core/enum/tasks_action_enum.dart';
 import 'package:daily_tasks/src/core/utils/extensions/date_time_extension.dart';
 import 'package:daily_tasks/src/core/widget/no_data_widget.dart';
 import 'package:daily_tasks/src/core/widget/segmented_linear_progress_indicator.dart';
@@ -45,7 +46,7 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> {
         ),
       ),
       initialState: const DailyTasksState.idle(dailyTasks: []),
-    );
+    )..getDailyTasks();
   }
 
   @override
@@ -114,11 +115,20 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> {
           TextButton(
             onPressed: () {
               if (formKey.currentState!.validate()) {
-                ScaffoldMessenger.of(context)
-                  ..removeCurrentSnackBar()
-                  ..showSnackBar(
-                    const SnackBar(content: Text('Задача добавлена')),
-                  );
+                final dailyTask = DailyTaskModel(
+                  id: const Uuid().v4(),
+                  title: taskTitleController.text,
+                  description: taskDescriptionController.text,
+                  weight: int.parse(taskWeightController.text),
+                  isCompleted: false,
+                );
+                _dailyTasksController.manageDailyTasks(dailyTask, TasksActionEnum.add);
+                // TODO(Grayson): Показывать сообщение о добавлении задачи
+                // ScaffoldMessenger.of(context)
+                //   ..removeCurrentSnackBar()
+                //   ..showSnackBar(
+                //     const SnackBar(content: Text('Задача добавлена')),
+                //   );
               } else {
                 ScaffoldMessenger.of(context)
                   ..removeCurrentSnackBar()

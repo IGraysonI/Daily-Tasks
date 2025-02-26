@@ -50,7 +50,7 @@ final class DailyTasksController extends StateController<DailyTasksState> with D
       );
 
   /// Get the list of [DailyTaskModel]
-  void getDailyTasks() => handle(
+  void fetchDailyTasks() => handle(
         () async {
           setState(
             DailyTasksState.processing(

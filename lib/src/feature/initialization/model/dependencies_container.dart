@@ -1,6 +1,7 @@
 import 'package:app_database/app_database.dart';
 import 'package:daily_tasks/src/core/constant/application_config.dart';
 import 'package:daily_tasks/src/core/utils/logger/logger.dart';
+import 'package:daily_tasks/src/feature/daily_tasks/controller/daily_tasks_controller.dart';
 import 'package:daily_tasks/src/feature/settings/controller/application_settings_controller.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -15,6 +16,7 @@ class DependenciesContainer {
     required this.logger,
     required this.config,
     required this.applicationSettingsController,
+    required this.dailyTasksController,
     required this.packageInfo,
     required this.appDatabase,
   });
@@ -27,6 +29,9 @@ class DependenciesContainer {
 
   /// [ApplicationSettingsController] instance, used to manage application settings.
   final ApplicationSettingsController applicationSettingsController;
+
+  /// [DailyTasksController] instance, used to manage daily tasks.
+  final DailyTasksController dailyTasksController;
 
   /// [PackageInfo] instance, contains information about the application.
   final PackageInfo packageInfo;

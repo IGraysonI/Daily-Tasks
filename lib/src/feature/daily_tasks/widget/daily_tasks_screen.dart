@@ -46,7 +46,7 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> {
         ),
       ),
       initialState: const DailyTasksState.idle(dailyTasks: []),
-    )..getDailyTasks();
+    )..fetchDailyTasks();
   }
 
   @override
@@ -115,6 +115,7 @@ class _DailyTasksScreenState extends State<DailyTasksScreen> {
           TextButton(
             onPressed: () {
               if (formKey.currentState!.validate()) {
+                // TODO(Grayson): Перенести в репозиторий?
                 final dailyTask = DailyTaskModel(
                   id: const Uuid().v4(),
                   title: taskTitleController.text,

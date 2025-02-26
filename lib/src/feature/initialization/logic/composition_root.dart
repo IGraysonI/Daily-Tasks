@@ -2,6 +2,9 @@ import 'package:app_database/app_database.dart';
 import 'package:clock/clock.dart';
 import 'package:daily_tasks/src/core/constant/application_config.dart';
 import 'package:daily_tasks/src/core/utils/logger/logger.dart';
+import 'package:daily_tasks/src/feature/daily_tasks/controller/daily_tasks_controller.dart';
+import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_datasource.dart';
+import 'package:daily_tasks/src/feature/daily_tasks/data/daily_tasks_repository.dart';
 import 'package:daily_tasks/src/feature/initialization/model/dependencies_container.dart';
 import 'package:daily_tasks/src/feature/settings/controller/application_settings_controller.dart';
 import 'package:daily_tasks/src/feature/settings/data/application_settings_datasource.dart';
@@ -81,11 +84,13 @@ Future<DependenciesContainer> createDependenciesContainer(
   final packageInfo = await PackageInfo.fromPlatform();
   final applicationSettingsController = await createAppSettingsController(sharedPreferences);
   final appDatabase = await createAppDatabase();
+  final dailyTaskController = await createDailyTaskController(appDatabase);
   return DependenciesContainer(
     logger: logger,
     config: config,
     packageInfo: packageInfo,
     applicationSettingsController: applicationSettingsController,
+    dailyTasksController: dailyTaskController,
     appDatabase: appDatabase,
   );
 }
@@ -112,6 +117,24 @@ Future<ApplicationSettingsController> createAppSettingsController(
   final initialState = ApplicationSettingsState.idle(applicationSettings: applicationSettings);
   return ApplicationSettingsController(
     applicaitonSettingsRepository: applicationSettingsRepository,
+    initialState: initialState,
+  );
+}
+
+/// Creates an instance of [DailyTasksController].
+///
+/// The [DailyTasksController] is initialized at startup to fetch the daily tasks from the local storage.
+Future<DailyTasksController> createDailyTaskController(
+  AppDatabase appDatabase,
+) async {
+  final dailyTasksRepository = DailyTasksRepositoryImpl(
+    dailyTasksDatasource: DailyTasksDatasourceImpl(
+      localDataProvider: LocalDataProvider(appDatabase),
+    ),
+  );
+  const initialState = DailyTasksState.idle(dailyTasks: []);
+  return DailyTasksController(
+    dailyTasksRepository: dailyTasksRepository,
     initialState: initialState,
   );
 }

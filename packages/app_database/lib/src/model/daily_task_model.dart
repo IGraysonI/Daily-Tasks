@@ -1,5 +1,8 @@
 import 'package:app_database/src/app_database.dart';
 
+/// Type definition for a daily task id.
+typedef DailyTaskId = String;
+
 /// {@template daily_task}
 /// Model for a daily task.
 /// {@endtemplate}
